@@ -2,6 +2,8 @@
 # script to start the Salsa app from run.sh
 #   ruby run.rb file_to_serve
 
+require 'httparty'
+require 'launchy'
 require 'optparse'
 require 'ostruct'
 require 'byebug'
@@ -58,8 +60,7 @@ options = OpenStruct.new
 OptionParser.new do |opts|
   opts.banner = 'Usage: run.rb [--file FileName | --restart | --kill]'
 
-  opts.on('-f', '--file', 'File to serve by Salsa') do |file_name|
-    puts "File: #{file_name}"
+  opts.on('-f', '--file FILE_NAME', 'File to serve by Salsa') do |file_name|
     options.file_name = file_name
   end
 
@@ -70,9 +71,12 @@ OptionParser.new do |opts|
   opts.on('-k', '--kill', 'Kill Salsa') do
     options.kill_salsa = true
   end
-end.parse!
 
-byebug
+  opts.on('-l', '--line LINE_NO', 'Request a line') do |line_no|
+    puts ">>>>> #{line_no}"
+    options.line_no = line_no
+  end
+end.parse!
 
 # Restart Salsa
 if options.restart_salsa
@@ -90,8 +94,22 @@ if !is_salsa_alive?
   start_salsa
 end
 
+# if a line was requested, get it and exit
+if options.line_no
+  puts HTTParty.get('http://0.0.0.0:3333/lines', {
+      body: "line_number=#{options.line_no}"
+  })
+
+  exit
+end
+
 # if a file name was passed in, open salsa and point it to the
 # file, otherwise, just open another instance of the salsa UI
-options.file_name.nil? ?
-    open("http://0.0.0.0:3333") :
-    open("http://0.0.0.0:3333/file&#{options.file_name}")
+if not options.file_name.nil?
+  HTTParty.post('http://0.0.0.0:3333/file', {
+      body: "file_name=#{options.file_name}"
+  })
+end
+
+# no args passed in, just launch another instance
+Launchy.open('http://0.0.0.0:3333')

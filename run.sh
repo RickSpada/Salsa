@@ -25,8 +25,14 @@ case $i in
     # Terminate Salsa and exit
     #
     -k|--kill)
-        echo "Terminating Salsa"
         ruby $scriptDir/run.rb --kill
+        exit 0
+    ;;
+    #
+    # Request a line from Salsa
+    #
+    -l=*|--line=*)
+        ruby $scriptDir/run.rb --line "${i#*=}"
         exit 0
     ;;
     #
@@ -44,13 +50,16 @@ esac
 done
 
 #
-# Exit early if no file passed in or if the file doesn't exist
+# If no file passed in, launch another instance of the ui
 #
 if [ -z "$FILE_TO_SERVE" ]; then
-    echo "File not passed in.  Exiting."
-    exit 1
+    ruby $scriptDir/run.rb
+    exit
 fi
 
+#
+# If a file passed in and it doesn't exist, error and bail
+#
 if [ ! -e $FILE_TO_SERVE ]; then
     echo "File '$FILE_TO_SERVE' not found.  Exiting."
     exit 1
@@ -62,4 +71,4 @@ fi
 # a rails server is already running, filename is ok, ...)
 #---------------------------------------------------------
 #
-ruby $scriptDir/run.rb -f $fileToServe
+ruby $scriptDir/run.rb -f $FILE_TO_SERVE

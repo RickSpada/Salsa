@@ -17,7 +17,6 @@ class Files::Process
     # read each line in and create a SalsaLine object for each
     line_no = 0
     File.open(@file_name).each do |line|
-      byebug
       line_no = line_no + 1
       line.chop! if line[-1] == "\n"
       salsa_line = SalsaLine.create({ :line_no => line_no, :text => line })
