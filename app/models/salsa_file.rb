@@ -7,7 +7,7 @@
 #  file_name       :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  lines           :string
+#  line_count      :integer
 #
 
 class SalsaFile < ApplicationRecord
@@ -30,7 +30,10 @@ class SalsaFile < ApplicationRecord
 
   def reset
     self.file_name = nil
-    self.lines = []
+    self.line_count = 0
     self.save!
+
+    # delete all SalsaLines, they're no longer valid
+    SalsaLine.all.map(&:delete)
   end
 end
