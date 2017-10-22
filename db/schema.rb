@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171022144521) do
+ActiveRecord::Schema.define(version: 20171022155626) do
 
   create_table "salsa_files", force: :cascade do |t|
     t.integer "singleton_guard"
     t.string "file_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "lines"
     t.index ["singleton_guard"], name: "index_salsa_files_on_singleton_guard", unique: true
   end
 

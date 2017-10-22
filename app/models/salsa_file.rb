@@ -7,6 +7,7 @@
 #  file_name       :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
+#  lines           :string
 #
 
 class SalsaFile < ApplicationRecord
@@ -25,5 +26,11 @@ class SalsaFile < ApplicationRecord
       row.save!
       row
     end
+  end
+
+  def reset
+    self.file_name = nil
+    self.lines = []
+    self.save!
   end
 end
