@@ -15,8 +15,8 @@ class FileController < ApplicationController
     params.require(:file_name)
 
     # process the file, if an error occurs it will be rescued above
-    Files::Process.call(params[:file_name])
-    render({ :json => nil, :root => true, :status => 200 })
+    num_lines = Files::Process.call(params[:file_name])
+    render({ :json => { num_lines: num_lines }, :root => true, :status => 200 })
   end
 
   def render_failure(errors, status)
