@@ -1,13 +1,12 @@
 # == Schema Information
 #
-# Table name: salsa_files
+# Table name: salsa_lines
 #
-#  id              :integer          not null, primary key
-#  singleton_guard :integer
-#  file_name       :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  lines           :string
+#  id         :integer          not null, primary key
+#  line_no    :integer
+#  text       :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
