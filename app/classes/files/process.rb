@@ -11,15 +11,20 @@ class Files::Process
     raise StandardError, "File, '#{@file_name}' not found." if not File.file?(@file_name)
 
     # get the SalsaFile singleton and reset it
-    salsa = SalsaFile.instance
-    salsa.reset
+    salsa_file = SalsaFile.instance
+    salsa_file.reset
 
-    # read in each line into the singleton's 'lines' attribute
-    lines = []
-    File.open(@file_name, 'r').each { |line| lines << line }
-    salsa.update_attributes(file_name: @file_name, lines: lines)
+    # read each line in and create a SalsaLine object for each
+    line_no = 0
+    File.open(@file_name).each do |line|
+      byebug
+      line_no = line_no + 1
+      line.chop! if line[-1] == "\n"
+      salsa_line = SalsaLine.create({ :line_no => line_no, :text => line })
+    end
+    salsa_file.update_attributes(file_name: @file_name, line_count: line_no)
 
     # return the number of lines
-    salsa.lines.length
+    salsa_file.line_count
   end
 end
