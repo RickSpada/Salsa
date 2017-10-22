@@ -3,11 +3,11 @@ class FileController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   rescue_from ActionController::ParameterMissing do |e|
-    render_failure(e.message, :bad_request)
+    render :json => { :errors => e.message }, :status => :bad_request
   end
 
   rescue_from StandardError do |e|
-    render_failure(e.message, :bad_request)
+    render :json => { :errors => e.message }, :status => :bad_request
   end
 
   # POST /file
