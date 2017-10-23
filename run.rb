@@ -78,15 +78,9 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-# Restart Salsa
-if options.restart_salsa
-  puts 'Salsa not running' if !is_salsa_alive?
-  start_salsa
-end
-
-# Terminate Salsa
-kill_salsa if options.kill_salsa && is_salsa_alive?
-
+# Restart or Terminate Salsa
+kill_salsa if options.kill_salsa || options.restart_salsa
+start_salsa if options.restart_salsa
 exit! if options.restart_salsa || options.kill_salsa
 
 # Start Salsa if necessary
