@@ -17,6 +17,6 @@ class LinesController < ApplicationController
 
     # Fetch the requested line number
     line = Lines::Get.call(params[:line_number])
-    render({ :json => { line: line }, :root => true, :status => 200 })
+    render({ :json => { line: line }, :status => 200 })
   end
 end
