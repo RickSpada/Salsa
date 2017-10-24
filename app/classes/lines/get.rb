@@ -4,7 +4,6 @@ class Lines::Get
   end
 
   def initialize(line_no)
-    puts ">>>>> #{line_no}"
     @line_no = line_no.to_i
   end
 
