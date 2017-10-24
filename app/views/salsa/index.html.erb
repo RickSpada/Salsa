@@ -1,0 +1,21 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+<html>
+<body>
+<h1>Welcome to Salsa!</h1>
+<%= form_tag('/lines', :method => 'get', :remote => true, 'data-type' => :json,
+             :'data-update-target' => 'line-results', :id => 'salsa-form') do %>
+    <%= label_tag('Enter the line number:') %>
+    <%= text_field_tag :line_number %>
+
+    <script rel="javascript" type="text/javascript" href="js/jquery-1.11.3.min.js">
+      document.body.addEventListener('ajax:success', function(event) {
+          var detail = event.detail;
+          document.getElementById("line-results").innerHTML = detail[0].line;
+      })
+    </script>
+<% end %>
+</body>
+
+<div>Line: </div>
+<div id='line-results'></div>
+</html>
