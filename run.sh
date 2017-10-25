@@ -11,16 +11,10 @@ scriptDir=`dirname $0`
 #---------------------------------------------------------
 #
 
-for i in "$@"
+while [[ $# -gt 0 ]]
 do
-case $i in
-    #
-    # Restart Salsa and exit
-    #
-    -r|--restart)
-        ruby $scriptDir/run.rb --restart
-        exit 0
-    ;;
+key="$1"
+case $key in
     #
     # Terminate Salsa and exit
     #
@@ -31,20 +25,25 @@ case $i in
     #
     # Request a line from Salsa
     #
-    -l=*|--line=*)
-        ruby $scriptDir/run.rb --line "${i#*=}"
+    -l|--line)
+        LINE_NO="$2"
+        shift # past argument
+        shift # past value
+        ruby $scriptDir/run.rb --line "$LINE_NO"
         exit 0
     ;;
     #
     # File to serve
     #
-    -f=*|--file_name=*)
-    FILE_TO_SERVE="${i#*=}"
-    shift # past argument=value
+    -f|--file_name)
+        FILE_TO_SERVE="$2"
+        shift # past argument
+        shift # past value
     ;;
-    *)
     # unknown option, assume it's the name of the file to serve up
-    FILE_TO_SERVE=$i
+    *)
+        FILE_TO_SERVE=$1
+        shift # past value
     ;;
 esac
 done
