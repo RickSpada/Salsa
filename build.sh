@@ -1,7 +1,10 @@
 #! /bin/bash
 
 echo 'Installing bundler...'
-gem install bundler
+sudo gem install bundler
 
 echo 'Installing gems...'
 bundle install
+
+echo 'Running migrations...'
+rake db:migrate
