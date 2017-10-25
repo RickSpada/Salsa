@@ -2,6 +2,7 @@ class FileController < ApplicationController
   # maybe someday add authentication
   skip_before_action :verify_authenticity_token
 
+  # TODO DRY this up
   rescue_from ActionController::ParameterMissing do |e|
     render :json => { :errors => e.message }, :status => :bad_request
   end
