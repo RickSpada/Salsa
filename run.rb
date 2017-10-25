@@ -64,24 +64,20 @@ OptionParser.new do |opts|
     options.file_name = file_name
   end
 
-  opts.on('-r', '--restart', 'Restart Salsa') do
-    options.restart_salsa = true
-  end
-
   opts.on('-k', '--kill', 'Kill Salsa') do
     options.kill_salsa = true
   end
 
   opts.on('-l', '--line LINE_NO', 'Request a line') do |line_no|
-    puts ">>>>> #{line_no}"
     options.line_no = line_no
   end
 end.parse!
 
 # Restart or Terminate Salsa
-kill_salsa if options.kill_salsa || options.restart_salsa
-start_salsa if options.restart_salsa
-exit! if options.restart_salsa || options.kill_salsa
+if options.kill_salsa
+  kill_salsa
+  exit!
+end
 
 # Start Salsa if necessary
 if !is_salsa_alive?
@@ -90,10 +86,17 @@ end
 
 # if a line was requested, get it and exit
 if options.line_no
-  puts HTTParty.get('http://0.0.0.0:3333/lines', {
+  response = HTTParty.get('http://0.0.0.0:3333/lines', {
       body: "line_number=#{options.line_no}"
   })
 
+  parsed_response = response
+  if parsed_response.key?('errors')
+    puts ">>> ERROR: #{parsed_response['errors']}"
+    exit
+  end
+
+  puts parsed_response['line']
   exit
 end
 
