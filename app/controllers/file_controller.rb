@@ -15,6 +15,8 @@ class FileController < ApplicationController
   def create
     params.require(:file_name)
 
+    raise StandardError, "File, '#{params[:file_name]}' not found." if not File.file?(params[:file_name])
+
     # process the file, if an error occurs it will be rescued above
     num_lines = Files::Process.call(params[:file_name])
     render({ :json => { num_lines: num_lines }, :root => true, :status => 200 })
