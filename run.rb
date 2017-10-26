@@ -42,7 +42,7 @@ end
 # Kill the salsa process
 def kill_salsa
   puts 'Terminating Salsa'
-  Process.kill('TERM', salsa_pid) if salsa_pid
+  Process.kill('SIGKILL', salsa_pid) if salsa_pid
 end
 
 # Start the salsa process
@@ -50,6 +50,21 @@ def start_salsa
   puts 'Starting Salsa'
   Dir.chdir File.dirname(__FILE__)
   system 'rails s &>salsa.log &'
+
+  # Salsa takes a little bit to start up.  Loop here, say for 10
+  # seconds while it does so
+  10.times do
+    if is_salsa_alive?
+      break
+    else
+      sleep(1)
+    end
+  end
+
+  if not is_salsa_alive?
+    puts ">>>>> Something went wrong, the Salsa server did not start.  Exiting…"
+    exit!
+  end
 end
 
 # ------------------------------------------------------------------------------
