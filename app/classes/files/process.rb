@@ -1,5 +1,7 @@
 class Files::Process
   def self.call(file_name)
+    raise StandardError, "File, '#{file_name}' not found." if not File.file?(@file_name)
+
     Thread.new { new(file_name).call }
   end
 
@@ -8,8 +10,6 @@ class Files::Process
   end
 
   def call
-    raise StandardError, "File, '#{@file_name}' not found." if not File.file?(@file_name)
-
     # get the SalsaFile singleton and reset it
     salsa_file = SalsaFile.instance
     salsa_file.reset
