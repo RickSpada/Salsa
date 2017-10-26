@@ -12,7 +12,7 @@
           var detail = event.detail;
           document.getElementById("line-results").innerHTML = detail[0].line;
       })
-      
+
       document.body.addEventListener('ajax:error', function(event) {
           var detail = event.detail;
           document.getElementById("line-results").innerHTML = detail[0].errors;
