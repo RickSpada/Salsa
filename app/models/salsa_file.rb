@@ -34,6 +34,6 @@ class SalsaFile < ApplicationRecord
     self.save!
 
     # delete all SalsaLines, they're no longer valid
-    SalsaLine.all.map(&:delete)
+    SalsaLine.delete_all
   end
 end
