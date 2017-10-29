@@ -41,7 +41,7 @@ The **SalsaFile** is a Singleton that has two primary attributes, the `file_name
 As mentioned, this construct is a Singleton as there can only be one **Salsa** file being served up at a time.
 
 ### SalsaLine
-The **SalsaLine** contains a single line from the **Salsa** file.  The two attributes of interest are the `line_no` and `text`.  The `line_no` as it sounds is the line number in the **Salsa** file and `text` is the text at that line.
+The **SalsaLine** contains the line numbers and file offsets.  The `line_no` as it sounds is the line number in the **Salsa** file and `line_offset` is the offset into the file where the text is located.
 
 ## How the system works
 When the **Salsa** `/file` endpoint is called to set or change the file being served the system responds by:
@@ -55,6 +55,8 @@ When the `/lines` endpoint is called, **Salsa** responds by:
 
 1. Checking that the line number is within bounds (i.e., less than or equal to the `line_count` stored in the **SalsaFile** singleton).  If not within bounds, an error is returned.
 2. Performing an **ActiveRecord** query to find the **SalsaLine** with the specified line number.
+3. Using the **SalsaLine** to `seek` into the **Salsa** file to set the I/O position to where the line of text is located.
+4. Calling `gets` to retrieve the requested line.
 
 ## How will the system perform with a 1GB file? a 10 GB file? a 100 GB file?
 The key algorithmic components in the system are:
@@ -115,6 +117,6 @@ If there were unlimited time to spend I would do the following (highest priority
 * Add authentication
 
 ## If you were to critique your code, what would you have to say about it?
-Overall, I'd give the code a good grade, I recognize that the design is flawed in how it constructs the database used to serve up the file.  The Ruby code is well structured, which has a lot to do with the Ruby on Rails framework.  The endpoints are very lightweight, leaving the heavy lifting to other classes in the system.  Using ActiveRecord simplified a lot of the effort in managing the data model.
+Overall, I'd give the code a good grade.  It uses memory efficiently by only storing the line numbers and offsets in the database.  The Ruby code is well structured, which has a lot to do with the Ruby on Rails framework.  The endpoints are very lightweight, leaving the heavy lifting to other classes in the system.  Using ActiveRecord simplified a lot of the effort in managing the data model.
 
 The shell script, run.sh, is ok, I don't do a lot of shell scripting so each time it's a learning experience.
