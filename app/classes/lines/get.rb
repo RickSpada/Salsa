@@ -19,6 +19,9 @@ class Lines::Get
     raise StandardError, 'Database is corrupt.  Reattach file to reset.' if
         salsa_line.count > 1
 
-    salsa_line.first.text
+    puts salsa_line.first.line_offset
+    "#{salsa_line.first.line_offset}"
+
+    Files::GetLine.call(salsa_line.first.line_offset)
   end
 end

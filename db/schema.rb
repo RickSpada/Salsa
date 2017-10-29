@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171022183319) do
+ActiveRecord::Schema.define(version: 20171029090947) do
 
   create_table "salsa_files", force: :cascade do |t|
     t.integer "singleton_guard"
@@ -23,9 +23,9 @@ ActiveRecord::Schema.define(version: 20171022183319) do
 
   create_table "salsa_lines", force: :cascade do |t|
     t.integer "line_no"
-    t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "line_offset"
   end
 
 end

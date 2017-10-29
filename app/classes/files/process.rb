@@ -16,10 +16,13 @@ class Files::Process
 
     # read each line in and create a SalsaLine object for each
     line_no = 0
+    line_offset = 0
     File.open(@file_name).each do |line|
       line_no = line_no + 1
-      line.chop! if line[-1] == "\n"
-      salsa_line = SalsaLine.create({ :line_no => line_no, :text => line })
+      line_length = line.length
+      SalsaLine.create({ :line_no => line_no, :line_offset => line_offset })
+      line_offset = line_offset + line_length
+
       salsa_file.update_attributes(line_count: line_no)
     end
 
